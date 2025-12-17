@@ -898,16 +898,16 @@ QByteArray QZipReader::fileData(const QString &fileName) const
 {
     d->scanFiles();
     int i;
-    ushort general_purpose_bits;
+    ushort general_purpose_bits = 0;
     for (i = 0; i < d->fileHeaders.size(); ++i) {
-        FileHeader &header_curr = d->fileHeaders.at(i);
+        const FileHeader &header_curr = d->fileHeaders.at(i);
         general_purpose_bits = readUShort(header_curr.h.general_purpose_bits);
         QString file_name;
         // ensure we really use the same method to parse file_name as we do in fillFileInfo()
         if (general_purpose_bits & Utf8Names)
             file_name = QString::fromUtf8(header_curr.file_name);
         else
-            file_name = QString::fromLocal8Bit(header_curr.file_name)
+            file_name = QString::fromLocal8Bit(header_curr.file_name);
 
         if (file_name == fileName)
             break;
